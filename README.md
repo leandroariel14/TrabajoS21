@@ -24,7 +24,7 @@ El **módulo de informes** está previsto para una etapa futura del proyecto.
 ## 🚀 Cómo ejecutar el proyecto
 
 1. Clona este repositorio:  
-   `git clone https://github.com/usuario/sistema-agrometeorologico.git`
+   `git clone https://github.com/leandroariel14/TrabajoS21.git`
    
 2. Configura la base de datos MySQL con los scripts disponibles en `/database`.
 
