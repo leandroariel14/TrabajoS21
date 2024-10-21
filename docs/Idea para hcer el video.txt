@@ -1,0 +1,67 @@
+¡Me encanta la idea de usar "Self Control" de Laura Branigan! Es una canción energética de los 80s que puede dar un toque único a tu video. Te ayudaré a crear un concepto que sea fácil de ejecutar.
+
+Concepto del video:
+- Estilo retro-futurista inspirado en los 80s, jugando con la estética de la canción
+- Alternar entre la interfaz de consola y visualizaciones de datos simples
+- Usar transiciones con efecto VHS o glitch para darle ese toque retro
+
+Estructura propuesta (3 minutos aprox):
+
+1. Intro (0:00 - 0:20)
+- Comenzar con el sonido de una computadora antigua encendiendo
+- Fade in de "Self Control" mientras aparece el título del sistema
+- Mostrar código corriendo en la consola con efecto matrix
+
+2. Demostración principal (0:20 - 2:30)
+- Mostrar la carga de datos
+- Transiciones entre diferentes visualizaciones
+- La música como fondo continuo
+
+3. Cierre (2:30 - 3:00)
+- Fade out de la música
+- Mostrar créditos con estilo retro
+
+Aquí te propongo un guión para la narración con voz IA:
+
+```
+[Tono sereno pero energético, estilo años 80]
+
+"Bienvenidos al futuro de la meteorología. 
+Un sistema donde los datos cobran vida.
+
+[Pausa dramática]
+
+Observa cómo cada número cuenta una historia:
+La temperatura, danzando entre extremos...
+La lluvia, marcando su propio ritmo...
+La humedad, flotando en el aire digital...
+Y la heliofanía, midiendo el abrazo del sol.
+
+[Cambio de tono más técnico]
+
+Nuestro sistema procesa cada dato con precisión milimétrica,
+transformando simples números en información vital.
+Cada lectura, cada medición, nos acerca más a comprender
+los secretos que el clima nos susurra.
+
+[Tono conclusivo]
+
+Este no es solo un sistema de datos...
+Es tu ventana al mundo meteorológico.
+Bienvenido al futuro... bienvenido a [nombre de tu sistema]."
+```
+
+Consejos prácticos para la edición:
+1. Usa OBS Studio para grabar la pantalla (es gratis y fácil de usar)
+2. Para la voz IA puedes usar ElevenLabs o Murf.ai
+3. Para efectos retro básicos, puedes usar:
+   - DaVinci Resolve (gratis) 
+   - Capcut (más simple, también gratis)
+
+Elementos visuales simples que puedes incluir:
+- Líneas de código en verde fosforescente
+- Gráficos simples de barras o líneas
+- Números cambiando rápidamente
+- Efectos de estática o glitch entre transiciones
+
+¿Te gustaría que profundicemos en algún aspecto en particular? ¿Quizás en cómo lograr algún efecto específico o cómo estructurar mejor alguna sección?
