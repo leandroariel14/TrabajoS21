@@ -4,12 +4,7 @@ package tp3;
 //import java.util.Scanner;
 
 import java.util.Scanner;
-import static tp3.Pluviometria.ANSI_GREEN;
-import static tp3.Pluviometria.agregarPluviometro;
-import static tp3.Pluviometria.consultarPluviometro;
-import static tp3.Pluviometria.eliminarPluviometro;
-import static tp3.Pluviometria.listarPluviometro;
-import static tp3.Pluviometria.modificarPluviometro;
+
 
 //import java.time.LocalDate;
 //import java.time.LocalDateTime;
@@ -79,13 +74,13 @@ public class Termometria {
                     int tipo_termometro = scanner.nextInt();
                     System.out.println(ANSI_GREEN + "Ingrese la capacidad total del termometro, se espera un entero");
                     int total_grados = scanner.nextInt();
-                    System.out.println(ANSI_GREEN + "Ingrese descripción de termometro");
+                    scanner.nextLine();
+                    System.out.println(ANSI_GREEN + "Ingrese descripción de termómetro");
                     String descripcion = scanner.nextLine();
-                    
                     agregarTermometro(tipo_termometro, total_grados, descripcion);
                     }catch(Exception e){
-                    System.out.println(ANSI_GREEN + "Error al ingresar los datos. Por favor, intente de nuevo.");
-                     }break;
+                    System.out.println(ANSI_GREEN + "Error al ingresar los datos. Por favor, intente de nuevo.");}
+                     break;
                 case 2:
                     //Se solicita los datos para eliminar
                      try {System.out.println(ANSI_GREEN + "Ingrese tipo de termómetro, se espera un entero");
