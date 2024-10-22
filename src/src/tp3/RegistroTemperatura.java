@@ -88,7 +88,8 @@ public class RegistroTemperatura {
         int opcion = scanner.nextInt();
         scanner.nextLine(); // Consumir el carácter de nueva línea
         switch (opcion) {
-                case 1:                    
+                case 1:
+                Termometria.consolaTermometro();
                     break;
                 case 2:
                     //Se solicita los datos para dar de alta

@@ -17,7 +17,7 @@ public class Tp3 {
         //Intento capturar excepciones ante cualquier ingreso fuera de los valores permitidos
         try{ int gestionar = scanner.nextInt();
         if (gestionar == 1){
-           Usuario.gestionarUsuario();
+           Usuario.gestionarUsuario(); // SI bien es una maqueta, se intenta mostrar el módulo de gestión de usuario
         } else if (gestionar == 2) {
         //Inicio de un bucle para gestionar el menú 
         while (!salir) {
