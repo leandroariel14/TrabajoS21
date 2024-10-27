@@ -21,6 +21,10 @@ Este repositorio contiene el desarrollo de un **sistema de registros de datos ag
 ⚠️ **Nota:** Las funcionalidades de generación de estadísticas serán implementadas cuando un analista de datos realice un proceso ETL.  
 El **módulo de informes** está previsto para una etapa futura del proyecto.
 
+## 🎥 Video Demostrativo
+
+Para una demostración del sistema, puedes ver el siguiente video: [Sistema de Registro de Datos Agrometeorológicos - Video](https://youtu.be/2AE-POHlcwk).
+
 ## 🚀 Cómo ejecutar el proyecto
 
 1. Clona este repositorio:  
