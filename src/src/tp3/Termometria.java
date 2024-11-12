@@ -1,170 +1,175 @@
 
 package tp3;
-
-//import java.util.Scanner;
-
+// Importo las librerias a usar
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
-
-//import java.time.LocalDate;
-//import java.time.LocalDateTime;
-//import java.time.LocalTime;
-
-/**
- *
- * @author gonzalez.leandro
- */
 public class Termometria {
-    //Se puede crear una clase que tenga las constantes que se van a usar en el sistema
-    public static final String ANSI_GREEN = "\u001B[32m"; //Para dar un sensación de pantalla de fosforo
-    public static final String ANSI_RESET = "\u001B[0m"; // Para resetear el color
-    protected int tipo_termometro;
-    protected int total_grados;
-    protected String descripcion;
-    //Constructor vacío
-    public Termometria() {
-    }
-    //Constructor con los atributos correspondientes
-    public Termometria(int tipo_termometro, int total_grados, String descripcion) {
-        this.tipo_termometro = tipo_termometro;
-        this.total_grados = total_grados;
-        this.descripcion = descripcion;
+    private int tipoTermometro;
+    private double totalGrados;
+    private String descripcion;
+
+    public Termometria() {}
+
+    // Captura de datos desde la consola
+    public void capturarDatosTermometro() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese el tipo de termómetro: ");
+        this.tipoTermometro = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la descripción del termómetro: ");
+        this.descripcion = scanner.nextLine();
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese el total de grados: ");
+        this.totalGrados = scanner.nextDouble();
+        agregarTermometro();
     }
 
-    public int getTipo_termometro() {
-        return tipo_termometro;
-    }
+    // Agregar un nuevo termómetro
+    public void agregarTermometro() {
+        String query = "INSERT INTO termometria (tipo_termometro, total_grados, descripcion) VALUES (?, ?, ?)";
 
-    public void setTipo_termometro(int tipo_termometro) {
-        this.tipo_termometro = tipo_termometro;
-    }
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = con.prepareStatement(query)) {
 
-    public int getGrados() {
-        return total_grados;
-    }
+            stmt.setInt(1, this.tipoTermometro);
+            stmt.setDouble(2, this.totalGrados);
+            stmt.setString(3, this.descripcion);
 
-    public void setGrados(int grados) {
-        this.total_grados = total_grados;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-    public static void consolaTermometro(){
-       Scanner scanner = new Scanner(System.in);
-       boolean salir = false;
-       while (!salir) {
-        System.out.println(ANSI_GREEN + "===== Termómetro =====");        
-        System.out.println(ANSI_GREEN + "1.Agregar Termómetro");
-        System.out.println(ANSI_GREEN + "2.Eliminar Termómetro");
-        System.out.println(ANSI_GREEN + "3.Modificar Termómetro");
-        System.out.println(ANSI_GREEN + "4.Consultar Termómetro");
-        System.out.println(ANSI_GREEN + "5.Listar Termómetro");
-        System.out.println(ANSI_GREEN + "6.Salir");
-        int opcion = scanner.nextInt();
-        scanner.nextLine(); // Consumir el carácter de nueva línea
-        switch (opcion) {
-                case 1:  
-                    //Se solicita los datos para dar de alta
-                    try {System.out.println(ANSI_GREEN + "Ingrese tipo de Termómetro, se espera un entero");
-                    int tipo_termometro = scanner.nextInt();
-                    System.out.println(ANSI_GREEN + "Ingrese la capacidad total del termometro, se espera un entero");
-                    int total_grados = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.println(ANSI_GREEN + "Ingrese descripción de termómetro");
-                    String descripcion = scanner.nextLine();
-                    agregarTermometro(tipo_termometro, total_grados, descripcion);
-                    }catch(Exception e){
-                    System.out.println(ANSI_GREEN + "Error al ingresar los datos. Por favor, intente de nuevo.");}
-                     break;
-                case 2:
-                    //Se solicita los datos para eliminar
-                     try {System.out.println(ANSI_GREEN + "Ingrese tipo de termómetro, se espera un entero");
-                    int tipo_termometro = scanner.nextInt();
-                    System.out.println(ANSI_GREEN + "Ingrese la capacidad total del termómetro, se espera un entero");
-                    int total_grados = scanner.nextInt();
-                    System.out.println(ANSI_GREEN + "Ingrese descripción de termómetro");
-                    String descripcion = scanner.nextLine();
-                    
-                    eliminarTermometro(tipo_termometro, total_grados, descripcion);
-                    }catch(Exception e){
-                    System.out.println(ANSI_GREEN + "Error al ingresar los datos. Por favor, intente de nuevo.");}
-                    break;
-
-                case 3:
-                    //Se solicita los datos para modificar
-                      //Se solicita los datos para eliminar
-                     try {System.out.println(ANSI_GREEN + "Ingrese tipo de termómetro, se espera un entero");
-                    int tipo_termometro = scanner.nextInt();
-                    System.out.println(ANSI_GREEN + "Ingrese la capacidad total del termómetro, se espera un entero");
-                    int total_grados = scanner.nextInt();
-                    System.out.println(ANSI_GREEN + "Ingrese descripción de termómetro");
-                    String descripcion = scanner.nextLine();
-                    
-                    modificarTermometro(tipo_termometro, total_grados, descripcion);
-                    }catch(Exception e){
-                    System.out.println(ANSI_GREEN + "Error al ingresar los datos. Por favor, intente de nuevo.");}
-                    break;
-                case 4:
-                    //Se solicita los datos para Consultar
-                      //Se solicita los datos para eliminar
-                     try {System.out.println(ANSI_GREEN + "Ingrese tipo de termómetro, se espera un entero");
-                    int tipo_termometro = scanner.nextInt();
-                    System.out.println(ANSI_GREEN + "Ingrese la capacidad total del termómetro, se espera un entero");
-                    int total_grados = scanner.nextInt();
-                    System.out.println(ANSI_GREEN + "Ingrese descripción de termómetro");
-                    String descripcion = scanner.nextLine();
-                    
-                    consultarTermometro(tipo_termometro, total_grados, descripcion);
-                    }catch(Exception e){
-                    System.out.println(ANSI_GREEN + "Error al ingresar los datos. Por favor, intente de nuevo.");}
-                    break;
-                case 5:
-                    //Se solicita los datos para Listar
-                     //Se solicita los datos para eliminar
-                     try {System.out.println(ANSI_GREEN + "Ingrese tipo de termómetro, se espera un entero");
-                    int tipo_termometro = scanner.nextInt();
-                    System.out.println(ANSI_GREEN + "Ingrese la capacidad total del termómetro, se espera un entero");
-                    int total_grados = scanner.nextInt();
-                    System.out.println(ANSI_GREEN + "Ingrese descripción de termómetro");
-                    String descripcion = scanner.nextLine();
-                    
-                    listarTermometro(tipo_termometro, total_grados, descripcion);
-                    }catch(Exception e){
-                    System.out.println(ANSI_GREEN + "Error al ingresar los datos. Por favor, intente de nuevo.");}
-                    break;
-                case 6:
-                    System.out.println(ANSI_GREEN + "Saliendo del sistema...");
-                    salir = true;
-                    break;
-                                    
-                default:
-                    System.out.println(ANSI_GREEN + "Opción no válida, elige nuevamente.");
-            }
+            int rowsInserted = stmt.executeUpdate();
+            System.out.println(rowsInserted > 0 ? VariablesEstaticas.ANSI_GREEN + "Termómetro agregado exitosamente!" : "Error al agregar termómetro.");
+        } catch (SQLException e) {
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "Error al agregar termómetro: " + e.getMessage());
         }
     }
-   private static void  agregarTermometro(int tipo_termometro,int total_grados, String descripcion){
-   System.out.println(ANSI_GREEN + "Se agrego un termómetro "+ descripcion + " Con el total de grados "+ total_grados+" Tipo de Termómetro "+tipo_termometro);
-                    
-   }
-   private static void  modificarTermometro(int tipo_termometro,int total_grados, String descripcion){
-   System.out.println(ANSI_GREEN +"Se modifico un termómetro "+ descripcion + " Con el total de grados "+ total_grados+" Tipo de Termómetro "+tipo_termometro);
-                    
-   }
-   public static void  eliminarTermometro(int tipo_termometro,int total_grados, String descripcion){
-   System.out.println(ANSI_GREEN +"Se elimino un termómetro "+ descripcion + " Con el total de grados "+ total_grados+" Tipo de Termómetro "+tipo_termometro);
-                    
-   }
-   public static void  consultarTermometro(int tipo_termometro,int total_grados, String descripcion){
-   System.out.println(ANSI_GREEN +"Se consulto un termómetro "+ descripcion + " Con el total de grados "+ total_grados+" Tipo de Termómetro "+tipo_termometro);
-                    
-   }
-   public static void  listarTermometro(int tipo_termometro,int total_grados, String descripcion){
-   System.out.println(ANSI_GREEN +"Se listo  termómetro "+ descripcion + " Con el total de grados "+ total_grados+" Tipo de Termómetro "+tipo_termometro);
-                    
-   }
+
+    // Listar todos los termómetros
+    public void listarTermometros() {
+        String query = "SELECT * FROM termometria";
+
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = con.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "Listado de termómetros:");
+            while (rs.next()) {
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Tipo: " + rs.getInt("tipo_termometro") +
+                                   ", Total Grados: " + rs.getDouble("total_grados") +
+                                   ", Descripción: " + rs.getString("descripcion"));
+            }
+        } catch (SQLException e) {
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "Error al listar termómetros: " + e.getMessage());
+        }
+    }
+
+    // Eliminar un termómetro
+    public void eliminarTermometro(int tipoTermometro) {
+        String query = "DELETE FROM termometria WHERE tipo_termometro = ?";
+
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setInt(1, tipoTermometro);
+            int rowsDeleted = stmt.executeUpdate();
+            System.out.println(rowsDeleted > 0 ? VariablesEstaticas.ANSI_GREEN + "Termómetro eliminado exitosamente!" : "Termómetro no encontrado.");
+        } catch (SQLException e) {
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "Error al eliminar el termómetro: " + e.getMessage());
+        }
+    }
+
+    // Actualizar un termómetro
+    public void actualizarTermometro(int tipoTermometro) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la nueva descripción: ");
+        this.descripcion = scanner.nextLine();
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese el nuevo total de grados: ");
+        this.totalGrados = scanner.nextDouble();
+
+        String query = "UPDATE termometria SET descripcion = ?, total_grados = ? WHERE tipo_termometro = ?";
+
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setString(1, this.descripcion);
+            stmt.setDouble(2, this.totalGrados);
+            stmt.setInt(3, tipoTermometro);
+
+            int rowsUpdated = stmt.executeUpdate();
+            System.out.println(rowsUpdated > 0 ? VariablesEstaticas.ANSI_GREEN + "Termómetro actualizado exitosamente!" : "Termómetro no encontrado.");
+        } catch (SQLException e) {
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "Error al actualizar el termómetro: " + e.getMessage());
+        }
+    }
+    // Consultar Termómetro
+    public void consultarTermometro(int tipoTermometro) {
+    String query = "SELECT * FROM termometria WHERE tipo_termometro = ?";
+
+    try (Connection con = ConexionBD.obtenerConexion();
+         PreparedStatement stmt = con.prepareStatement(query)) {
+
+        stmt.setInt(1, tipoTermometro);
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Termómetro encontrado:");
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Tipo: " + rs.getInt("tipo_termometro"));
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Total Grados: " + rs.getDouble("total_grados"));
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Descripción: " + rs.getString("descripcion"));
+            } else {
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Termómetro no encontrado.");
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println(VariablesEstaticas.ANSI_GREEN + "Error al consultar el termómetro: " + e.getMessage());
+    }
+}
+    // Menú de opciones para la gestión de termómetros
+    public void menuTermometria() {
+        Scanner scanner = new Scanner(System.in);
+        int opcion;
+
+        do {
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "===== Gestión de Termómetros =====");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "1. Agregar termómetro");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "2. Eliminar termómetro");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "3. Actualizar termómetro");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "4. Consultar termómetro");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "5. Listar termómetros");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "6. Salir");
+            System.out.print(VariablesEstaticas.ANSI_GREEN + "Seleccione una opción: ");
+            opcion = scanner.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    capturarDatosTermometro();
+                    break;                
+                case 2:
+                    System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese el tipo de termómetro a eliminar: ");
+                    int tipoEliminar = scanner.nextInt();
+                    eliminarTermometro(tipoEliminar);
+                    break;
+                case 3:
+                    System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese el tipo de termómetro a actualizar: ");
+                    int tipoActualizar = scanner.nextInt();
+                    actualizarTermometro(tipoActualizar);
+                    break;
+                case 4:
+                    System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese el tipo de termómetro a consultar: ");
+                    int tipoConsulta = scanner.nextInt();
+                    consultarTermometro(tipoConsulta);
+                    break;       
+                case 5:
+                    listarTermometros();
+                    break;   
+                case 6:
+                    System.out.println(VariablesEstaticas.ANSI_GREEN + "Saliendo...");
+                    break;
+                default:
+                    System.out.println(VariablesEstaticas.ANSI_GREEN + "Opción inválida. Intente de nuevo.");
+            }
+        } while (opcion != 6);
+    }
+    
 }

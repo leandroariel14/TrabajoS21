@@ -2,9 +2,9 @@
 package tp3;
 import java.util.Scanner;
 
+
+
 public class Tp3 {
-    public static final String ANSI_GREEN = "\u001B[32m"; //Para dar un sensación de pantalla de fosforo
-    public static final String ANSI_RESET = "\u001B[0m"; // Para resetear el color
     
   public static void main(String[] args) {
         
@@ -12,25 +12,28 @@ public class Tp3 {
         Scanner scanner = new Scanner(System.in);
         boolean salir = false;
 
-        System.out.println(ANSI_GREEN + "===== BIENVENIDO AL SISTEMA REGISTRO DE DATOS AGROMETEOROLOGICOS =====");
-        System.out.println(ANSI_GREEN + "Desea gestionar usuarios? 1.Si | 2.No");
+        System.out.println(VariablesEstaticas.ANSI_GREEN + "===== BIENVENIDO AL SISTEMA REGISTRO DE DATOS AGROMETEOROLOGICOS =====");
+        System.out.println(VariablesEstaticas.ANSI_GREEN+ "Desea gestionar usuarios? 1.Si | 2.No");
         //Intento capturar excepciones ante cualquier ingreso fuera de los valores permitidos
         try{ int gestionar = scanner.nextInt();
         if (gestionar == 1){
-           Usuario.gestionarUsuario(); // SI bien es una maqueta, se intenta mostrar el módulo de gestión de usuario
+        Usuario usuario = new Usuario();
+        usuario.menuUsuario(); 
+          
         } else if (gestionar == 2) {
         //Inicio de un bucle para gestionar el menú 
         while (!salir) {
             
-            System.out.println(ANSI_GREEN + "1.TERMOMETRIA | 2.EVAPORIMETRICA | 3.PLUVIOMETRIA | 4.ANEMOMETRIA | 5.NUBOSIDAD | 6.PSICROMETRIA | 7.FENOMENOS | 8.SALIR");
-            System.out.println(ANSI_GREEN + "Elige una opción: ");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "1.TERMOMETRIA | 2.EVAPORIMETRICA | 3.PLUVIOMETRIA | 4.ANEMOMETRIA | 5.NUBOSIDAD | 6.PSICROMETRIA | 7.FENOMENOS | 8.SALIR");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "Elige una opción: ");
 
             int opcion = scanner.nextInt();
             
 
             switch (opcion) {
                 case 1:
-                    RegistroTemperatura.ConsolaTermometria();
+                    RegistroTemperatura regtem = new RegistroTemperatura();
+                    regtem.menuRegistroTemperatura();
                     break;
                 case 2:
                     RegistroEvaporimetrica.ConsolaEvaporimetrica();
@@ -55,14 +58,14 @@ public class Tp3 {
                     salir = true;
                     break;
                 default:
-                    System.out.println("Opción no válida, elige nuevamente.");
+                    System.out.println(VariablesEstaticas.ANSI_GREEN +"Opción no válida, elige nuevamente.");
             }
         }
 
         
-    } else{System.out.println(ANSI_GREEN + "Ingrese una opción valida...Saliendo del Sistema");}
+    } else{System.out.println(VariablesEstaticas.ANSI_GREEN + "Ingrese una opción valida...Saliendo del Sistema");}
         }catch (Exception e) {
-                System.out.println(ANSI_GREEN + "Error inesperado: se espera el ingreso de un 1 o 2 " /* + e.getMessage()*/);
+                System.out.println(VariablesEstaticas.ANSI_GREEN+ "Error inesperado: se espera el ingreso de un 1 o 2 " /* + e.getMessage()*/);
                 scanner.nextLine(); // Limpiar el buffer del scanner
             }
         scanner.close();

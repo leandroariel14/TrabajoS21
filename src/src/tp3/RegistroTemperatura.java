@@ -1,213 +1,212 @@
 
 package tp3;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
-
-
-/**
- *
- * @author gonzalez.leandro
- */
 public class RegistroTemperatura {
-    public static final String ANSI_GREEN = "\u001B[32m"; //Para dar un sensación de pantalla de fosforo
-    public static final String ANSI_RESET = "\u001B[0m"; // Para resetear el color
-    private LocalDate fecha;
-    private LocalDateTime hora;
-    private int tipo_termometro;
-    private int grados;
+    private String fecha;
+    private String hora;
     private String observacion;
+    private double grados;
+    private int usuariosLegajo;
+    private int tipoTermometro;
 
-    public RegistroTemperatura() {
-    }
-    //Constructor con los atributos correspondientes
-    public RegistroTemperatura(LocalDate fecha, LocalDateTime hora, int tipo_termometro, int grados, String observacion) {
-        this.fecha = fecha;
-        this.hora = hora;
-        this.tipo_termometro = tipo_termometro;
-        this.grados = grados;
-        this.observacion = observacion;
-    }
+    public RegistroTemperatura() {}
 
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    public LocalDateTime getHora() {
-        return hora;
-    }
-
-    public void setHora(LocalDateTime hora) {
-        this.hora = hora;
-    }
-
-    public int getTipo_termometro() {
-        return tipo_termometro;
-    }
-
-    public void setTipo_termometro(int tipo_termometro) {
-        this.tipo_termometro = tipo_termometro;
-    }
-
-    public int getGrados() {
-        return grados;
-    }
-
-    public void setGrados(int grados) {
-        this.grados = grados;
-    }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
-    
-    public static void ConsolaTermometria(){
-        //Se crea clase scanner para captar datos 
+    // Captura de datos desde la consola
+    public void capturarDatosRegistro() {
         Scanner scanner = new Scanner(System.in);
-        boolean salir = false;
-        // While para manejar la consola del ingreso de datos
-        while (!salir) {
-        System.out.println(ANSI_GREEN + "===== TERMOMETRIA =====");        
-        System.out.println(ANSI_GREEN + "1.Agregar Tipo de Termómetro");
-        System.out.println(ANSI_GREEN + "2.Agregar Lectura");
-        System.out.println(ANSI_GREEN + "3.Eliminar Lectura");
-        System.out.println(ANSI_GREEN + "4.Modificar Lectura");
-        System.out.println(ANSI_GREEN + "5.Consultar Lectura");
-        System.out.println(ANSI_GREEN + "6.Listar Lecturas");
-        System.out.println(ANSI_GREEN + "7.Salir");
-        int opcion = scanner.nextInt();
-        scanner.nextLine(); // Consumir el carácter de nueva línea
-        switch (opcion) {
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la fecha (YYYY-MM-DD): ");
+        this.fecha = scanner.nextLine();
+
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la hora (HH:MM:SS): ");
+        this.hora = scanner.nextLine();
+
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la observación: ");
+        this.observacion = scanner.nextLine();
+
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese los grados: ");
+        this.grados = scanner.nextDouble();
+
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese el legajo del usuario: ");
+        this.usuariosLegajo = scanner.nextInt();
+
+        System.out.print(VariablesEstaticas.ANSI_GREEN +"Ingrese el tipo de termómetro: ");
+        this.tipoTermometro = scanner.nextInt();
+
+        agregarRegistro();
+    }
+
+    // Agregar un nuevo registro de temperatura
+    public void agregarRegistro() {
+        String query = "INSERT INTO registrotemp (fecha, hora, observacion, grados, Usuarios_legajo, Termometria_tipo_termometro) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setString(1, this.fecha);
+            stmt.setString(2, this.hora);
+            stmt.setString(3, this.observacion);
+            stmt.setDouble(4, this.grados);
+            stmt.setInt(5, this.usuariosLegajo);
+            stmt.setInt(6, this.tipoTermometro);
+
+            int rowsInserted = stmt.executeUpdate();
+            System.out.println(rowsInserted > 0 ? VariablesEstaticas.ANSI_GREEN + "Registro de temperatura agregado exitosamente!" : "Error al agregar registro.");
+        } catch (SQLException e) {
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "Error al agregar registro de temperatura: " + e.getMessage());
+        }
+    }
+
+    // Listar todos los registros
+    public void listarRegistros() {
+        String query = "SELECT * FROM registrotemp";
+
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = con.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "Registros de temperatura:");
+            while (rs.next()) {
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Fecha: " + rs.getString("fecha") +
+                                   ", Hora: " + rs.getString("hora") +
+                                   ", Observación: " + rs.getString("observacion") +
+                                   ", Grados: " + rs.getDouble("grados") +
+                                   ", Usuario Legajo: " + rs.getInt("Usuarios_legajo") +
+                                   ", Tipo Termómetro: " + rs.getInt("Termometria_tipo_termometro"));
+            }
+        } catch (SQLException e) {
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "Error al listar registros: " + e.getMessage());
+        }
+    }
+
+    // Eliminar un registro por fecha y hora
+    public void eliminarRegistro(String fecha, String hora) {
+        String query = "DELETE FROM registrotemp WHERE fecha = ? AND hora = ?";
+
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setString(1, fecha);
+            stmt.setString(2, hora);
+            int rowsDeleted = stmt.executeUpdate();
+            System.out.println(rowsDeleted > 0 ? VariablesEstaticas.ANSI_GREEN + "Registro eliminado exitosamente!" : "Registro no encontrado.");
+        } catch (SQLException e) {
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "Error al eliminar el registro: " + e.getMessage());
+        }
+    }
+
+    // Actualizar un registro por fecha y hora
+    public void actualizarRegistro(String fecha, String hora) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la nueva observación: ");
+        this.observacion = scanner.nextLine();
+
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese los nuevos grados: ");
+        this.grados = scanner.nextDouble();
+
+        String query = "UPDATE registrotemp SET observacion = ?, grados = ? WHERE fecha = ? AND hora = ?";
+
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setString(1, this.observacion);
+            stmt.setDouble(2, this.grados);
+            stmt.setString(3, fecha);
+            stmt.setString(4, hora);
+
+            int rowsUpdated = stmt.executeUpdate();
+            System.out.println(rowsUpdated > 0 ? VariablesEstaticas.ANSI_GREEN + "Registro actualizado exitosamente!" : "Registro no encontrado.");
+        } catch (SQLException e) {
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "Error al actualizar el registro: " + e.getMessage());
+        }
+    }
+
+    public void consultarRegistro(String fecha, String hora) {
+    String query = "SELECT * FROM registrotemp WHERE fecha = ? AND hora = ?";
+
+    try (Connection con = ConexionBD.obtenerConexion();
+         PreparedStatement stmt = con.prepareStatement(query)) {
+
+        stmt.setString(1, fecha);
+        stmt.setString(2, hora);
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Registro encontrado:");
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Fecha: " + rs.getString("fecha"));
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Hora: " + rs.getString("hora"));
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Observación: " + rs.getString("observacion"));
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Grados: " + rs.getDouble("grados"));
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Usuario Legajo: " + rs.getInt("Usuarios_legajo"));
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Tipo Termómetro: " + rs.getInt("Termometria_tipo_termometro"));
+            } else {
+                System.out.println(VariablesEstaticas.ANSI_GREEN + "Registro no encontrado.");
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println(VariablesEstaticas.ANSI_GREEN + "Error al consultar el registro: " + e.getMessage());
+    }
+    }
+    // Menú de opciones para la gestión de registros
+    public void menuRegistroTemperatura() {
+        Scanner scanner = new Scanner(System.in);
+        int opcion;
+
+        do {
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "===== Gestión de Registros de Temperatura =====");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "1. Agregar registro");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "2. Listar registros");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "3. Eliminar registro");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "4. Actualizar registro");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "5. Consultar registro");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "6. Gestionar termómetro");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "7. Salir"); 
+            System.out.print(VariablesEstaticas.ANSI_GREEN + "Seleccione una opción: ");
+            opcion = scanner.nextInt();
+
+            switch (opcion) {
                 case 1:
-                Termometria.consolaTermometro();
+                    capturarDatosRegistro();
                     break;
                 case 2:
-                    //Se solicita los datos para dar de alta
-                    try {System.out.println(ANSI_GREEN + "Ingrese la fecha de la toma de datos, formato (yyyy-mm-dd)");
-                    String fechaingresoAlta = scanner.nextLine();
-                    LocalDate fechaAlta = LocalDate.parse(fechaingresoAlta);
-                    System.out.println(ANSI_GREEN + "Ingrese la hora de la toma de datos, formato (HH:mm)");
-                    String horaingresoAlta = scanner.nextLine();
-                    LocalTime horaAlta = LocalTime.parse(horaingresoAlta);
-                    System.out.println(ANSI_GREEN + "Ingrese tipo de termómetro");
-                    int tipo_termometroAlta = scanner.nextInt();
-                    System.out.println(ANSI_GREEN + "Ingrese cantidad de grados");
-                    int gradosAlta = scanner.nextInt();
-                    AgregarLectura(fechaAlta,horaAlta,tipo_termometroAlta,gradosAlta);
-                    }catch(Exception e){
-                    System.out.println(ANSI_GREEN + "Error al ingresar los datos. Por favor, intente de nuevo.");}
+                    listarRegistros();
                     break;
-
                 case 3:
-                    //Se solicita los datos para eliminar
-                    try{System.out.println(ANSI_GREEN + "Ingrese la fecha de la toma de datos, formato (yyyy-mm-dd)");
-                    String fechaingresoBaja = scanner.nextLine();
-                    LocalDate fechaBaja = LocalDate.parse(fechaingresoBaja);
-                    System.out.println(ANSI_GREEN + "Ingrese la hora de la toma de datos, formato (HH:mm)");
-                    String horaingresoBaja = scanner.nextLine();
-                    LocalTime horaBaja = LocalTime.parse(horaingresoBaja);
-                    System.out.println(ANSI_GREEN + "Ingrese tipo de termómetro");
-                    int tipo_termometroBaja = scanner.nextInt();
-                    EliminarLectura(fechaBaja,horaBaja,tipo_termometroBaja);
-                    }catch(Exception e){
-                    System.out.println(ANSI_GREEN + "Error al ingresar los datos. Por favor, intente de nuevo.");}
+                    System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la fecha del registro a eliminar: ");
+                    String fechaEliminar = scanner.next();
+                    System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la hora del registro a eliminar: ");
+                    String horaEliminar = scanner.next();
+                    eliminarRegistro(fechaEliminar, horaEliminar);
                     break;
                 case 4:
-                    //Se solicita los datos para modificar
-                    try{System.out.println(ANSI_GREEN + "Ingrese la fecha de la toma de datos, formato (yyyy-mm-dd)");
-                    String fechaingresoModifica = scanner.nextLine();
-                    LocalDate fechaModifica = LocalDate.parse(fechaingresoModifica);
-                    System.out.println(ANSI_GREEN + "Ingrese la hora de la toma de datos, formato (HH:mm)");
-                    String horaingresoModifica = scanner.nextLine();
-                    LocalTime horaModifica = LocalTime.parse(horaingresoModifica);
-                    System.out.println(ANSI_GREEN + "Ingrese tipo de termómetro");
-                    int tipo_termometroModifica = scanner.nextInt();
-                    System.out.println(ANSI_GREEN + "Ingrese cantidad de grados");
-                    int gradosModifica = scanner.nextInt();
-                    ModificarLectura(fechaModifica,horaModifica,tipo_termometroModifica,gradosModifica);
-                    }catch(Exception e){
-                    System.out.println(ANSI_GREEN + "Error al ingresar los datos. Por favor, intente de nuevo.");}
+                    System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la fecha del registro a actualizar: ");
+                    String fechaActualizar = scanner.next();
+                    System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la hora del registro a actualizar: ");
+                    String horaActualizar = scanner.next();
+                    actualizarRegistro(fechaActualizar, horaActualizar);
                     break;
-                case 5:
-                    //Se solicita los datos para Consultar
-                    try{System.out.println(ANSI_GREEN + "Ingrese la fecha de la toma de datos, formato (yyyy-mm-dd)");
-                    String fechaingresoConsulta = scanner.nextLine();
-                    LocalDate fechaConsulta = LocalDate.parse(fechaingresoConsulta);
-                    System.out.println(ANSI_GREEN + "Ingrese la hora de la toma de datos, formato (HH:mm)");
-                    String horaingresoConsulta = scanner.nextLine();
-                    LocalTime horaConsulta = LocalTime.parse(horaingresoConsulta);
-                    System.out.println(ANSI_GREEN + "Ingrese tipo de termómetro");
-                    int tipo_termometroConsulta = scanner.nextInt();
-                    
-                    ConsultaLectura(fechaConsulta,horaConsulta,tipo_termometroConsulta);
-                    }catch(Exception e){
-                    System.out.println(ANSI_GREEN + "Error al ingresar los datos. Por favor, intente de nuevo.");}
+                  case 5:
+                    System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la fecha del registro a consultar: ");
+                    String fechaConsulta = scanner.next();
+                    System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la hora del registro a consultar: ");
+                    String horaConsulta = scanner.next();
+                    consultarRegistro(fechaConsulta, horaConsulta);
                     break;
                 case 6:
-                  //Se solicita los datos para Listar
-                    try{System.out.println(ANSI_GREEN + "Ingrese la fecha desde de la toma de datos, formato (yyyy-mm-dd)");
-                    String fechaingresoListar1 = scanner.nextLine();
-                    LocalDate fechaListar1 = LocalDate.parse(fechaingresoListar1);
-                    System.out.println(ANSI_GREEN + "Ingrese la fecha hasta de la toma de datos, formato (yyyy-mm-dd)");
-                    String fechaingresoListar2 = scanner.nextLine();
-                    LocalDate fechaListar2 = LocalDate.parse(fechaingresoListar2);
-                    System.out.println(ANSI_GREEN + "Ingrese tipo de termómetro");
-                    int tipo_termometroListar = scanner.nextInt();
-                    
-                    ListarLectura(fechaListar1,fechaListar2,tipo_termometroListar);
-                    }catch(Exception e){
-                    System.out.println(ANSI_GREEN + "Error al ingresar los datos. Por favor, intente de nuevo.");}
-                    break;
+                    Termometria term = new Termometria();
+                    term.menuTermometria();
+                    break;              
                 case 7:
-                    System.out.println(ANSI_GREEN + "Saliendo del sistema...");
-                    salir = true;
+                    System.out.println(VariablesEstaticas.ANSI_GREEN + "Saliendo...");
                     break;
                 default:
-                    System.out.println(ANSI_GREEN + "Opción no válida, elige nuevamente.");
+                    System.out.println(VariablesEstaticas.ANSI_GREEN + "Opción inválida. Intente de nuevo.");
             }
-        } 
+        } while (opcion != 7);
     }
-    
-    private static void AgregarLectura(LocalDate fecha,LocalTime hora,int tipo_termometro,int grados){
-        //Combino la fecha y hora para una mejor lectura 
-        LocalDateTime fechahora = LocalDateTime.of(fecha, hora);
-        System.out.println(ANSI_GREEN + "Se agrego una lectura al termómetro " + tipo_termometro + " en grados " + grados + " En la Fecha " + fechahora);
-    
-    
-    }
-    private static void EliminarLectura(LocalDate fecha,LocalTime hora,int tipo_termometro){
-        //Combino la fecha y hora para una mejor lectura 
-        LocalDateTime fechahora = LocalDateTime.of(fecha, hora);
-        System.out.println(ANSI_GREEN + "Se elimino una lectura al termómetro " + tipo_termometro + " En la Fecha " + fechahora);
-     
-    }
-    private static void ModificarLectura(LocalDate fecha,LocalTime hora,int tipo_termometro,int grados){
-        //Combino la fecha y hora para una mejor lectura 
-        LocalDateTime fechahora = LocalDateTime.of(fecha, hora);
-        System.out.println(ANSI_GREEN + "Se modifico una lectura al termómetro " + tipo_termometro + " en grados " + grados + " En la Fecha " + fechahora);
-     
-    }
-    private static void ConsultaLectura(LocalDate fecha,LocalTime hora,int tipo_termometro){
-        //Combino la fecha y hora para una mejor lectura 
-        LocalDateTime fechahora = LocalDateTime.of(fecha, hora);
-        System.out.println(ANSI_GREEN + "Se consulto una lectura al termómetro " + tipo_termometro  + " En la Fecha " + fechahora);
-     
-    }
-    private static void ListarLectura(LocalDate fecha1,LocalDate fecha2,int tipo_termometro){
-        
-        System.out.println(ANSI_GREEN + "Se listo una lecturas del termómetro " + tipo_termometro  + " En la Fecha " + fecha1 +" Hasta "+ fecha2);
-     
-    }
-    //Hay codigo redundante, hay que pensarlo a futuro como un metodo private al cual pasarle parámetros 
 }
-
