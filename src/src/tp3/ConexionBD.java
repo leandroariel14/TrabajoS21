@@ -25,7 +25,7 @@ public class ConexionBD {
         return conexion;
     }
 
-    public static void close() {
+   /* public static void close() {
         try {
             if (conexion != null && !conexion.isClosed()) {
                 conexion.close();
@@ -34,5 +34,5 @@ public class ConexionBD {
         } catch (SQLException e) {
             System.out.println("Error al cerrar la conexión a la base de datos: " + e.getMessage());
         }
-    }
+    }*/
 }

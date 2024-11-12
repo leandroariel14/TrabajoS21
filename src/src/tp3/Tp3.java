@@ -24,7 +24,7 @@ public class Tp3 {
         //Inicio de un bucle para gestionar el menú 
         while (!salir) {
             
-            System.out.println(VariablesEstaticas.ANSI_GREEN + "1.TERMOMETRIA | 2.EVAPORIMETRICA | 3.PLUVIOMETRIA | 4.ANEMOMETRIA | 5.NUBOSIDAD | 6.PSICROMETRIA | 7.FENOMENOS | 8.SALIR");
+            System.out.println(VariablesEstaticas.ANSI_GREEN + "1.TERMOMETRIA | 2.PLUVIOMETRIA | 3.EVAPORIMETRICA | 4.ANEMOMETRIA | 5.NUBOSIDAD | 6.PSICROMETRIA | 7.FENOMENOS | 8.SALIR");
             System.out.println(VariablesEstaticas.ANSI_GREEN + "Elige una opción: ");
 
             int opcion = scanner.nextInt();
@@ -36,10 +36,11 @@ public class Tp3 {
                     regtem.menuRegistroTemperatura();
                     break;
                 case 2:
-                    RegistroEvaporimetrica.ConsolaEvaporimetrica();
+                    RegistroPluviometria regplu = new RegistroPluviometria();
+                    regplu.menuRegistroPluviometria();
                     break;
                 case 3:
-                   RegistroPluviometria.ConsolaPluviometria();
+                   System.out.println("===== EVAPORIMETRICA =====");
                     break;
                 case 4:
                     System.out.println("===== ANEMOMETRIA =====");
