@@ -23,7 +23,7 @@ public class RegistroTemperatura {
         System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la fecha (YYYY-MM-DD): ");
         this.fecha = scanner.nextLine();
 
-        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la hora (HH:MM:SS): ");
+        System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la hora (HH:MM): ");
         this.hora = scanner.nextLine();
 
         System.out.print(VariablesEstaticas.ANSI_GREEN + "Ingrese la observación: ");
