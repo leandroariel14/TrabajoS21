@@ -16,7 +16,7 @@ public class ConexionBD {
         if (conexion == null) {
             try {
                 conexion = DriverManager.getConnection(URL, USUARIO, CONTRASENA);
-                //System.out.println("Conexión exitosa a la base de datos");
+                // System.out.println("Conexión exitosa a la base de datos");
             } catch (SQLException e) {
                 System.out.println("Error al conectar a la base de datos");
                 e.printStackTrace();
@@ -25,14 +25,14 @@ public class ConexionBD {
         return conexion;
     }
 
-   /* public static void close() {
+    public static void cerrarConexion() { // Cambié 'close' por 'cerrarConexion'
         try {
             if (conexion != null && !conexion.isClosed()) {
                 conexion.close();
-                conexion = null;
-            }
+                conexion = null; 
+                }
         } catch (SQLException e) {
             System.out.println("Error al cerrar la conexión a la base de datos: " + e.getMessage());
         }
-    }*/
+    }
 }

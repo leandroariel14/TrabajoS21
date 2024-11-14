@@ -1,4 +1,4 @@
-
+//Importo librerias
 package tp3;
 import java.util.Scanner;
 
@@ -29,7 +29,7 @@ public class Tp3 {
 
             int opcion = scanner.nextInt();
             
-
+//hay módulos no codeados todavia, estos pongo un SOUT con el módulo
             switch (opcion) {
                 case 1:
                     RegistroTemperatura regtem = new RegistroTemperatura();
