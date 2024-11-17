@@ -23,7 +23,7 @@ El **módulo de informes** está previsto para una etapa futura del proyecto.
 
 ## 🎥 Video Demostrativo
 
-[![Sistema de Registro de Datos Agrometeorológicos - Video](https://img.youtube.com/vi/2AE-POHlcwk/0.jpg)](https://youtu.be/2AE-POHlcwk)
+[![Sistema de Registro de Datos Agrometeorológicos - Video](https://img.youtube.com/vi/X03dDCdwE88/0.jpg)](https://youtu.be/X03dDCdwE88)
 
 ## 🚀 Cómo ejecutar el proyecto
 
