@@ -33,3 +33,4 @@ El **módulo de informes** está previsto para una etapa futura del proyecto.
 2. Configura la base de datos MySQL con los scripts disponibles en `/database`.
 
 3. Importa el proyecto en tu IDE favorito y ejecuta.
+
